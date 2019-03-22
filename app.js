@@ -1,12 +1,13 @@
 var createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const { mongoose } = require('./db/mongoose');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const authRouter = require('./routes/auth');
+const authMiddleware = require('./middlewares/auth');
 const cors = require('cors');
 
 const app = express();
@@ -26,11 +27,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-app.listen(8081, () => console.log('Listening on port 8081'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', authRouter);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use('/', indexRouter);
+app.use('/users', authMiddleware);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

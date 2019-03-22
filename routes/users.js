@@ -48,4 +48,32 @@ router.post('/:user_id/posts', async (req, res, next) => {
   }
 })
 
+router.get('/:user_id/userInfo', async(req, res, next) => {
+  const currentUser = await User.findOne({ _id: req.params.user_id });
+  const userInfo = {
+    name: currentUser.name,
+    imgSrc: currentUser.photoURL,
+    bookTotal: currentUser.books.length,
+    memoTotal: currentUser.posts.length,
+  };
+
+  res.json(userInfo);
+});
+
+router.get('/:user_id/memos/:memo_pageNumber', async(req, res, next) => {
+  const memos =
+    await Post.find({ user_id: req.params.user_id })
+      .sort({ createdAt: 'desc' })
+      .limit(10 * req.params.memo_pageNumber)
+      .skip(10 * (req.params.memo_pageNumber - 1))
+  console.log(memos);
+  res.json(memos);
+});
+
+router.get('/:user_id/books', async(req, res, next) => {
+  const currentUser = await User.findOne({ _id: req.params.user_id });
+
+  res.json(currentUser.books.reverse());
+});
+
 module.exports = router;

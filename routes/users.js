@@ -31,6 +31,8 @@ router.post('/:user_id/posts', async (req, res, next) => {
             console.log(err);
             return res.sendStatus(500);
           }
+
+          res.sendStatus(200);
         });
       } else {
         currentUser.updateOne({
@@ -42,6 +44,8 @@ router.post('/:user_id/posts', async (req, res, next) => {
             console.log(err);
             return res.sendStatus(500);
           }
+
+          res.sendStatus(200);
         });
       }
     });
@@ -54,7 +58,6 @@ router.get('/:user_id/userInfo', async(req, res, next) => {
     name: currentUser.name,
     imgSrc: currentUser.photoURL,
     bookTotal: currentUser.books.length,
-    memoTotal: currentUser.posts.length,
   };
 
   res.json(userInfo);
@@ -74,6 +77,17 @@ router.get('/:user_id/books', async(req, res, next) => {
   const currentUser = await User.findOne({ _id: req.params.user_id });
 
   res.json(currentUser.books.reverse());
+});
+
+router.get('/:user_id/books/:book_title/memos', async(req, res, next) => {
+  const userInfo = await User.findOne({ _id:  req.params.user_id });
+  const chosenBook = userInfo.books.filter(book => book.title === req.params.book_title);
+  const memos = await Post.find({ user_id: req.params.user_id, bookInfo: chosenBook[0] });
+  
+  res.json({
+    memos,
+    chosenBook: chosenBook[0],
+  });
 });
 
 module.exports = router;

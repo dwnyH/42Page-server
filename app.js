@@ -7,6 +7,7 @@ const logger = require('morgan');
 const { mongoose } = require('./db/mongoose');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const postRouter = require('./routes/posts');
 const authMiddleware = require('./middlewares/auth');
 const cors = require('cors');
 
@@ -34,6 +35,8 @@ app.use(bodyParser.json());
 app.use('/', indexRouter);
 app.use('/users', authMiddleware);
 app.use('/users', usersRouter);
+app.use('/posts', authMiddleware);
+app.use('/posts', postRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

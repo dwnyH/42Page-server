@@ -8,7 +8,6 @@ const UserSchema = new Schema({
   uid: { type: String, required: true },
   photoURL: { type: String },
   books: Array,
-  posts: Array,
 });
 
 const User = mongoose.model('User', UserSchema);

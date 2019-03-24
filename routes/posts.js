@@ -34,4 +34,29 @@ router.delete('/:post_id', async(req, res, next) => {
     }
 });
 
+router.put('/:post_id', async(req, res, next) => {
+    try {
+        const { bookInfo, addedMemo, highlights, isPrivate } = req.body;
+        const updatedPost = await Post.findOneAndUpdate({ _id: req.params.post_id }, {
+            $set: {
+                bookInfo,
+                addedMemo,
+                highlights,
+                isPrivate,
+            }}, {new: true});
+
+        if (!updatedPost) {
+            console.log('업뎃완료!', updatedPost);
+            return res.sendStatus(404);
+        } else {
+            res.sendStatus(200);
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            test:'testing'
+        })
+    }
+});
+
 module.exports = router;

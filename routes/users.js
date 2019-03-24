@@ -74,19 +74,26 @@ router.get('/:user_id/memos/:memo_pageNumber', async(req, res, next) => {
 });
 
 router.get('/:user_id/books', async(req, res, next) => {
-  const currentUser = await User.findOne({ _id: req.params.user_id });
+  const userPosts = await Post.find({ user_id: req.params.user_id });
+  const userBooks = userPosts.reduce((allBooks, book) => {
+    if (!allBooks.includes(JSON.stringify(book.bookInfo))) {
+      allBooks.push(JSON.stringify(book.bookInfo));
+    }
+    return allBooks;
+  }, []);
 
-  res.json(currentUser.books.reverse());
+  res.json(userBooks.reverse());
 });
 
 router.get('/:user_id/books/:book_title/memos', async(req, res, next) => {
-  const userInfo = await User.findOne({ _id:  req.params.user_id });
-  const chosenBook = userInfo.books.filter(book => book.title === req.params.book_title);
-  const memos = await Post.find({ user_id: req.params.user_id, bookInfo: chosenBook[0] });
-  
+  const memos = await Post.find({
+    user_id: req.params.user_id, 'bookInfo.title': req.params.book_title
+  });
+  console.log('보이니?', memos);
+
   res.json({
     memos,
-    chosenBook: chosenBook[0],
+    chosenBook: memos[0].bookInfo
   });
 });
 

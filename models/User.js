@@ -7,7 +7,6 @@ const UserSchema = new Schema({
   name: { type: String, required: true },
   uid: { type: String, required: true },
   photoURL: { type: String },
-  books: Array,
 });
 
 const User = mongoose.model('User', UserSchema);

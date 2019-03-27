@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { keywordAPIKey } = require('../db/credentials');
+const { flatten } = require('lodash');
+const axios = require('axios');
+const request = require('request');
 const Post = require('../models/Post');
 const User = require('../models/User');
 
@@ -15,49 +19,21 @@ router.post('/:user_id/posts', async (req, res, next) => {
         console.log(error);
         return res.sendStatus(500);
       }
-
-      const bookDuplicated = currentUser.books.some(book => (
-        book.title === req.body.bookInfo.title
-      ));
-
-      if (!bookDuplicated) {
-        currentUser.updateOne({
-          $push: {
-            posts: newPost._id,
-            books: newPost.bookInfo,
-          }
-        }, (err) => {
-          if (err) {
-            console.log(err);
-            return res.sendStatus(500);
-          }
-
-          res.sendStatus(200);
-        });
-      } else {
-        currentUser.updateOne({
-          $push: {
-            posts: newPost._id,
-          }
-        }, (err) => {
-          if (err) {
-            console.log(err);
-            return res.sendStatus(500);
-          }
-
-          res.sendStatus(200);
-        });
-      }
+      res.status(201).json({
+        message: 'saved!'
+      });
     });
   }
 })
 
 router.get('/:user_id/userInfo', async(req, res, next) => {
+  console.log(req.params);
   const currentUser = await User.findOne({ _id: req.params.user_id });
+  console.log(currentUser);
   const userInfo = {
     name: currentUser.name,
     imgSrc: currentUser.photoURL,
-    bookTotal: currentUser.books.length,
+    // bookTotal: currentUser.books.length,
   };
 
   res.json(userInfo);
@@ -82,7 +58,7 @@ router.get('/:user_id/books', async(req, res, next) => {
     return allBooks;
   }, []);
 
-  res.json(userBooks.reverse());
+  res.json(userBooks);
 });
 
 router.get('/:user_id/books/:book_title/memos', async(req, res, next) => {
@@ -95,6 +71,62 @@ router.get('/:user_id/books/:book_title/memos', async(req, res, next) => {
     memos,
     chosenBook: memos[0].bookInfo
   });
+});
+
+router.get('/:user_id/keywords', async(req, res, next) => {
+  const savedWords = {};
+  let userMemos;
+  const getUserWords = async() => {
+    let keywordAnalysisResponse;
+    try {
+      userMemos = await Post.find({user_id: req.params.user_id}, 'addedMemo highlights');
+    } catch(err) {
+      console.log(err);
+      return res.status(500).json({
+        message: 'system error'
+      });
+    }
+
+    const userWords = userMemos.map(memo => {
+        return memo.addedMemo + memo.highlights
+    })
+    const text = userWords.toString();
+
+    try {
+        keywordAnalysisResponse = await axios({
+            method: 'post',
+            url: 'http://aiopen.etri.re.kr:8000/WiseNLU',
+            headers: {'Content-Type':'application/json; charset=UTF-8'},
+            data: {
+                'access_key': keywordAPIKey,
+                'argument': {
+                    'text': text,
+                    'analysis_code': 'morp'
+                }
+            }
+        })
+    } catch(err) {
+      console.log(err);
+      res.status(404).json({
+        message: 'Not found'
+      });
+    }
+
+    keywordAnalysisResponse.data.return_object.sentence.forEach(sentence => {
+        sentence.morp.forEach((word) => {
+            if (word.type === 'NNG' && savedWords[word.lemma]) {
+                savedWords[word.lemma] ++;
+            } else if (word.type === 'NNG') {
+                savedWords[word.lemma] = 1;
+            }
+        });
+    });
+
+    console.log('이고?', savedWords);
+    res.status(200).json(savedWords);
+  };
+
+  getUserWords();
 });
 
 module.exports = router;

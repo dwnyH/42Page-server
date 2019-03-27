@@ -15,21 +15,19 @@ router.delete('/:post_id', async(req, res, next) => {
             await User.findOneAndUpdate({_id: userId},
                 {$pull: {books: bookInfo}});
 
-            res.status(200).json({
-                deletedBook: bookInfo,
-                deletedMemo: req.params.post_id
+            return res.status(204).json({
+                message: 'delete success'
             });
         } else {
-            res.status(200).json({
-                deletedBook: null,
-                deletedMemo: req.params.post_id
-            })
+            res.status(204).json({
+                message: 'delete success'
+            });
         }
 
     } catch (err) {
         console.log(err);
-        res.status(500).json({
-            test:'testing'
+        return res.status(500).json({
+            message: 'server error'
         })
     }
 });
@@ -46,17 +44,59 @@ router.put('/:post_id', async(req, res, next) => {
             }}, {new: true});
 
         if (!updatedPost) {
-            console.log('업뎃완료!', updatedPost);
-            return res.sendStatus(404);
+            return res.status(404).json({
+                message: 'post is not Found'
+            });
         } else {
-            res.sendStatus(200);
+            console.log('업뎃완료!', updatedPost);
+            res.status(201).json({
+                message: 'update success'
+            })
         }
     } catch (err) {
         console.log(err);
         res.status(500).json({
-            test:'testing'
+            message: 'server error'
         })
     }
 });
+
+router.get('/memos/:memo_pageNumber', async(req, res, next) => {
+    let memos;
+    let memoWithProfiles;
+    try {
+        memos = await Post.find({})
+            .sort({ createdAt: 'desc' })
+            .limit(10 * req.params.memo_pageNumber)
+            .skip(10 * (req.params.memo_pageNumber - 1));
+    } catch (err) {
+        return res.statusCode(404).json({
+            message: 'memo is not found'
+        });
+    }
+
+    try {
+        memoWithProfiles = await Promise.all(memos.map(async(memo) => {
+            const userInfo = await User.findOne({_id: memo.user_id});
+            memo.user_id = userInfo;
+
+            return {
+                bookInfo: memo.bookInfo,
+                _id: memo._id,
+                isPrivate: memo.isPrivate,
+                addedMemo: memo.addedMemo,
+                highlights: memo.highlights,
+                createdAt: memo.createdAt,
+                user_id: userInfo,
+            }
+        }));
+    } catch (err) {
+        return res.statusCode(404).json({
+            message: 'profile is not found'
+        });
+    }
+
+    res.json(memoWithProfiles);
+  });
 
 module.exports = router;

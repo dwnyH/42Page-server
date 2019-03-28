@@ -8,7 +8,6 @@ const { mongoose } = require('./db/mongoose');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
-const keywordsRouter = require('./routes/keywords');
 const authMiddleware = require('./middlewares/auth');
 const cors = require('cors');
 

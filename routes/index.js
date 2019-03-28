@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { secret } = require('../db/credentials');
 const vision = require('@google-cloud/vision');
+const authMiddleware = require('../middlewares/auth');
 
 router.post('/auth', (req, res) => {
   const makeJwtToken = (userInfo) => {
@@ -62,7 +63,22 @@ router.post('/auth', (req, res) => {
       }
     }
   });
+});
 
+router.get('/keywords/:keyword/users', authMiddleware, async(req, res, next) => {
+  let users;
+  let keyword = req.params.keyword;
+
+  try {
+    users = await User.find().exists(`keywords.${keyword}`, true);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'server error'
+    });
+  }
+
+  res.status(200).json(users);
 });
 
 module.exports = router;

@@ -26,13 +26,10 @@ router.post('/:user_id/posts', async (req, res, next) => {
 })
 
 router.get('/:user_id/userInfo', async(req, res, next) => {
-  console.log(req.params);
   const currentUser = await User.findOne({ _id: req.params.user_id });
-  console.log(currentUser);
   const userInfo = {
     name: currentUser.name,
     imgSrc: currentUser.photoURL,
-    // bookTotal: currentUser.books.length,
   };
 
   res.json(userInfo);
@@ -62,7 +59,8 @@ router.get('/:user_id/books', async(req, res, next) => {
 
 router.get('/:user_id/books/:book_title/memos', async(req, res, next) => {
   const memos = await Post.find({
-    user_id: req.params.user_id, 'bookInfo.title': req.params.book_title
+    user_id: req.params.user_id,
+    'bookInfo.title': req.params.book_title,
   });
 
   res.json({

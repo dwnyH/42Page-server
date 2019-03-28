@@ -67,8 +67,8 @@ router.get('/memos/:memo_pageNumber', async(req, res, next) => {
     try {
         memos = await Post.find({})
             .sort({ createdAt: 'desc' })
-            .limit(10 * req.params.memo_pageNumber)
-            .skip(10 * (req.params.memo_pageNumber - 1));
+            .skip(10 * (req.params.memo_pageNumber-1))
+            .limit(10);
     } catch (err) {
         return res.statusCode(404).json({
             message: 'memo is not found'

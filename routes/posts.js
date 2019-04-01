@@ -48,7 +48,6 @@ router.put('/:post_id', async(req, res, next) => {
                 message: 'post is not Found'
             });
         } else {
-            console.log('업뎃완료!', updatedPost);
             res.status(201).json({
                 message: 'update success'
             })

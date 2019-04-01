@@ -1,9 +1,9 @@
 {
-  "name": "word-box-server",
+  "name": "42page-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "@google-cloud/vision": "^0.25.0",

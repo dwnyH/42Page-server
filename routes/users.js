@@ -141,8 +141,6 @@ router.get('/:user_id/keywords', async(req, res, next) => {
       });
     }
 
-    console.log(userInfoWithKeywords);
-
     res.status(200).json(topFiftyKeywords);
   };
 

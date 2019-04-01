@@ -38,10 +38,8 @@ router.post('/auth', (req, res) => {
       console.log(err);
     } else {
       if (user) {
-        console.log(req.body);
         try {
           const registeredUser = await User.findOne({ uid: req.body.uid });
-          await console.log(registeredUser);
           req.body.id = registeredUser._id;
           makeJwtToken(req.body);
         } catch (err) {

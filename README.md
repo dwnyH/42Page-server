@@ -1,28 +1,18 @@
-# **42Page - client & sever**
+# **42Page - Client & Server**
 
-42Page는 책에서 마음에 드는 구절을 편리하고 가독성있게 저장할 수 있는 모바일 웹 어플리케이션입니다. 책의 문장을 사진으로 찍으면 text화시켜서 보여주도록 하고, 다른 사람들과 어플리케이션 내에서 메모 내용을 공유할 수 있습니다.
-
-Table of Contents
-
-- Features
-- Installation
-- Skills
-- Version Control and Collaboration
-- Deployment
-- Challenges
-- Things to do
+42Page는 책에서 마음에 드는 구절을 편리하고 가독성있게 저장할 수 있는 모바일 웹 어플리케이션입니다. 책의 문장을 사진으로 찍으면 텍스트화 보여주도록 하고, 다른 사람들과 어플리케이션 내에서 메모 내용을 공유할 수 있습니다.
 
 ### **Features**
 
 - 로그인, 회원 인증
-- 카메라 또는 사진앨범에서 사진 선택 후, grid로 영역 설정
+- 카메라 또는 사진앨범에서 사진 선택 후, 그리드로 영역 설정
 - 사진 파일에서 지정된 영역 텍스트로 변환
 - 텍스트로 변환한 메모에 책 정보, 메모 덧붙이기
 - 메모 CRUD 기능
 - 사용자 전체 메모 피드 최신순으로 보기
-- 사용자 profile별 모든 메모, 책 메모 보기
-- 사용자의 상위 50개 keyword, wordcloud 형태로 보기
-- 관심있는 keyword를 가지고 있는 사용자 검색
+- 사용자 프로필별 모든 메모, 책 메모 보기
+- 사용자의 상위 50개 키워드, wordcloud 형태로 보기
+- 관심있는 키워드를 가지고 있는 사용자 검색
 
 ### **Installation**
 
@@ -58,7 +48,7 @@ npm start
 - React Router
 - HTTP request using Axios
 - Firebase Authentication
-- api : Google vision api / Kakao books api / ETRI AI 형태소 분석 API
+- API : Google Vision API / Kakao Books API / ETRI AI 형태소 분석 API
 
 **2. Server side**
 
@@ -90,7 +80,7 @@ npm start
 
 - **iphone 에서의 사진 오류 문제**
 
-  -> desktop web 환경에서 구현하는 것만 익숙하다보니 핸드폰으로 테스트 해보았을 때 오류가 생긴 원인과  해결방법을 찾는데에 쉽지 않았습니다. 다행히 stackoverflow를 통해 metadata에 의한 image rotating현상을 알게 되었고, 이러한 환경을 벗어날 수 있도록 도와주는 library를 이용하여 문제를 해결하였습니다. 
+  -> 데스크탑 웹 환경에서 구현하는 것만 익숙하다보니 핸드폰으로 테스트 해보았을 때 오류가 생긴 원인과  해결방법을 찾는데에 쉽지 않았습니다. 다행히 stackoverflow를 통해 metadata에 의한 image rotating현상을 알게 되었고, 이러한 환경을 벗어날 수 있도록 도와주는 library를 이용하여 문제를 해결하였습니다. 
 
 - **user schema 문제**
 

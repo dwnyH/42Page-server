@@ -6,21 +6,17 @@
 
 ![preview](https://github.com/hiiiii11/42Page-client/blob/master/src/42page-gif.gif)
 
-------
-
 ### **Features**
 
-- 로그인, 회원 인증
-- 카메라 또는 사진앨범에서 사진 선택 후, 그리드로 영역 설정
-- 사진 파일에서 지정된 영역 텍스트로 변환
-- 텍스트로 변환한 메모에 책 정보, 메모 덧붙이기
-- 메모 CRUD 기능
-- 사용자 전체 메모 피드 최신순으로 보기
-- 사용자 프로필별 모든 메모, 책 메모 보기
-- 사용자의 상위 50개 키워드, wordcloud 형태로 보기
-- 관심있는 키워드를 가지고 있는 사용자 검색
-
------
+* 로그인, 회원 인증
+* 카메라 또는 사진앨범에서 사진 선택 후, 그리드로 영역 설정
+* 사진 파일에서 지정된 영역 텍스트로 변환
+* 텍스트로 변환한 메모에 책 정보, 메모 입력
+* 메모 CRUD 기능
+* 사용자 전체 메모 피드 최신순으로 보기 제공
+* 사용자 프로필별 모든 메모, 책 메모 보기 제공
+* 사용자의 상위 50개 키워드, wordcloud 형태로 보기 제공
+* 관심있는 키워드를 가지고 있는 사용자 검색
 
 ### **Installation**
 
@@ -50,21 +46,22 @@ npm start
 
 **1. Client Side**
 
-- ES2015 +
-- React, Create-React-app
-- Redux
-- React Router
-- HTTP request using Axios
-- Firebase Authentication
-- API : Google Vision API / Kakao Books API / ETRI AI 형태소 분석 API
+* ES2015 +
+* React, Create-React-App
+* Redux
+* React Router
+* HTTP request using Axios
+* Firebase Authentication
+* API : Google Vision API / Kakao Books API / ETRI AI 형태소 분석 API
+* Jest and Enzyme for Unit-test
 
 **2. Server side**
 
-- Express
-- Node.js
-- JSON Web Token Authentication
-- mongoose
-- Mongo DB, atlas
+* Express
+* Node.js
+* JSON Web Token Authentication
+* Mongoose
+* Mongo DB, Atlas
 
 ------
 
@@ -72,43 +69,30 @@ npm start
 
 ## **Version Control**
 
-- Git, Github
-- Trello를 이용한 일정관리
+* Git, Github
+* Trello를 이용한 일정관리
 
 ------
 
-## Deployment
+## **Deployment**
 
-- **Client** : Netlify 서비스 이용하여 client 배포
-- **Server**: AWS Elastic Beanstalk
-
-------
-
-## **Challenges**
-
-- **iphone 에서의 사진 오류 문제**
-
-  -> 데스크탑 웹 환경에서 구현하는 것만 익숙하다보니 핸드폰으로 테스트 해보았을 때 오류가 생긴 원인과  해결방법을 찾는데에 쉽지 않았습니다. 다행히 stackoverflow를 통해 metadata에 의한 image rotating현상을 알게 되었고, 이러한 환경을 벗어날 수 있도록 도와주는 library를 이용하여 문제를 해결하였습니다. 
-
-- **user schema 문제**
-
-  -> 처음에 mongoose query에 익숙하지 않고 create와 read 기능만을 고려하여 schema를 작성하다보니, 사용자별로 저장된 책을 쉽게 불러올 수 있게끔 사용자 model schema에 책들을 title만 배열 형식으로 저장하는 형태로 설계하였습니다. 이런 식으로 진행하다보니 나중에 update, delete기능이 실행될 때 사용자 schema의 책 배열에 접근하여 확인해봐야하는 번거로움이 생겨 이를 삭제하고, 메모 schema에 user id를 삽입하여 메모 update/delete는 메모 schema에만 접근하도록 처리하고, create/read는 memo schema에서 user id와  book.title의 쿼리를 동시에 잡아서 처리하는 방식으로 해결하였습니다.
-
+* **Client** : Netlify 서비스 이용하여 client 배포
+* **Server**: AWS Elastic Beanstalk
 
 
 ------
 
 ## **Things to do**
 
-- 메모별 좋아요, 댓글 기능
-- circle ci
-- component unit test
-- server api unit test
-- integration test
-- code refactoring
+* ~~AWS로 배포한 서버 https 연결~~
+* Circle CI
+* Component Unit Test
+* Server Api Unit Test
+* Integration Test
+* 메모별 좋아요, 댓글 기능
 
 
 
+## **Sincere Thanks**
 
-
-Special Thanks to [Ken Huh](https://github.com/ken123777 "ken huh") / Vanilla Coding 
+[Ken Huh](https://github.com/ken123777 "ken huh") / Vanilla Coding 
